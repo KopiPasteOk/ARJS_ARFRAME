@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+    <script>
+      AFRAME.registerComponent("vidhandler", {
+        schema: {
+          video: {type: 'selector'}
+        },
+        init: function () {
+          this.video = this.data.video;
+          this.video.pause();
+        },
+        tick: function () {
+          if (this.el.object3D.visible == true) {
+            if (!this.toggle) {
+              this.toggle = true;
+              this.video.play();
+            }
+          } else {
+            this.toggle = false;
+            this.video.pause();
+          }
+        },
+      });
+    </script>
+  </head>
+
+  <body style="margin: 0; overflow: hidden">
+    <a-scene
+      vr-mode-ui="enabled: false"
+      id="scene"
+    > 
+      <a-assets>
+        <video
+          id="vid1"
+          src="assets/vid1.mp4"
+          preload="auto"
+          response-type="arraybuffer"
+          loop
+          crossorigin
+          webkit-playsinline
+          autoplay
+          playsinline
+        ></video>
+        <video
+          id="vid2"
+          src="assets/vid2.mp4"
+          preload="auto"
+          response-type="arraybuffer"
+          loop
+          crossorigin
+          webkit-playsinline
+          autoplay
+          playsinline
+        ></video>
+      </a-assets>
+
+      <a-marker
+        type="pattern"
+        preset="custom"
+        url="assets/pattern-general.patt"
+        vidhandler="video: #vid1"
+        smooth='true' 
+        smoothCount='10' 
+        smoothTolerance='0.01' 
+        smoothThreshold='5'
+        raycaster="objects: .clickable"
+        emitevents="true"
+        cursor="fuse: false; rayOrigin: mouse;"
+      >
+        <!-- <a-box position="1 0 0" material='src: #vid1'></a-box> -->
+        <!-- <a-box  position="0 0.5 0" material='src: #vid1'></a-box> -->
+        <a-video
+            src="#vid1"
+            scale="4 1 1"
+            position="0 0.5 0"
+            rotation="-45 0 0"
+            >
+        </a-video>
+      </a-marker>
+
+      <a-marker
+        type="pattern"
+        preset="custom"
+        url="assets/pattern-ccc.patt"
+        vidhandler="video: #vid2"
+        smooth='true' 
+        smoothCount='10' 
+        smoothTolerance='0.01' 
+        smoothThreshold='5'
+        raycaster="objects: .clickable"
+        emitevents="true"
+        cursor="fuse: false; rayOrigin: mouse;"
+      >
+        <!-- <a-box position="0 0.5 0" material='src: #vid2'></a-box> -->
+        <a-video
+            src="#vid2"
+            scale="4 1 1"
+            position="0 0.5 0"
+            rotation="-90 0 0">
+        </a-video>
+      </a-marker>
+
+      <a-entity
+        camera
+        position="0 0 0"
+        touchEnabled="false"
+        wasd-controls-enabled="false"
+        look-controls-enabled="false"
+      >
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
